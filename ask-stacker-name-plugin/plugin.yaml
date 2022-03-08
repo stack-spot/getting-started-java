@@ -1,0 +1,35 @@
+name: ask-stacker-name
+description: Plugin to add capacity to hello stacker app to ask stacker name before say hello
+types:
+  - app
+computed-inputs:
+  project_group_id_folder: "{{project_group_id|group_id_folder}}"
+hooks:
+  - type: edit
+    trigger: after-render
+    path: "{{project_group_id_folder}}/Main.java"
+    changes:
+      - search:
+          string: "package {{project_group_id}};"
+          insert-after:
+            snippet: snippets/imports
+          when:
+            not-exists: import java.io.IOException;
+      - search:
+          string: "public static void main(String[] args) {"
+          replace-by: 
+            value: "public static void main(String[] args) throws IOException {"
+          when:
+            not-exists: "public static void main(String[] args) throws IOException {"
+      - search:
+          string: "public static void main(String[] args) throws IOException {"
+          insert-after: 
+            snippet: snippets/ask-stacker-name
+          when:
+            not-exists: What is your name stacker?
+      - search:
+          pattern: System.out.println\("(.*) Stacker!"\);
+          replace-by:
+            value: System.out.printf("\1 %s!\\n", name);
+          when:
+            not-exists: "%s!\\n\", name);"

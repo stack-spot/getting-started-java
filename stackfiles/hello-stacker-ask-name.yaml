@@ -1,0 +1,5 @@
+type: app
+description: Java application to greet the stacker asking its name
+template: getting-started-java/hello-stacker-app
+plugins:
+  - plugin: getting-started-java/ask-stacker-name

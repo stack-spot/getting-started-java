@@ -1,0 +1,42 @@
+name: hello-stacker-app
+description: Java example template to create an app that prints a greeting message to the stacker
+types:
+  - app-template
+inputs:
+  - label: Project name
+    type: text
+    name: project_name
+  
+  - label: Project group id
+    type: text
+    name: project_group_id
+    global: true
+
+  - label: Greeting message to use
+    type: text
+    name: greeting_message
+    default: Hello
+    items:
+      - Hello
+      - Whats up
+      - Hi
+      - Good morning
+computed-inputs:
+  project_group_id_folder: "{{project_group_id|group_id_folder}}"
+lifecycle:
+  deploy:
+    supported-os:
+      - windows
+      - linux
+      - mac
+    requirements-check:
+      java:
+        check-command: java --version
+        info: java is not installed
+      javac:
+        check-command: javac --version
+        info: javac is not installed
+    deploy-command: 
+      linux: sh run.sh
+      windows: cmd /c run.bat
+      mac: sh run.sh
